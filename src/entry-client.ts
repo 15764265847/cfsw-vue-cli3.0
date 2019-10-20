@@ -10,21 +10,21 @@ Vue.use(VueRescroll);
 /**
  * 当组件复用时，触发asyncData钩子，重新请求数据
  */
-// Vue.mixin({
-// 	beforeRouteUpdate(to: any, from: any, next: any) {
-// 		const { asyncData } = (this as any).$options;
-// 		if (asyncData) {
-// 			asyncData({
-// 				store: (this as any).$store,
-// 				route: to
-// 			})
-// 				.then(next)
-// 				.catch(next);
-// 		} else {
-// 			next();
-// 		}
-// 	}
-// });
+Vue.mixin({
+	beforeRouteUpdate(to: any, from: any, next: any) {
+		const { asyncData } = (this as any).$options;
+		if (asyncData) {
+			asyncData({
+				store: (this as any).$store,
+				route: to
+			})
+				.then(next)
+				.catch(next);
+		} else {
+			next();
+		}
+	}
+});
 
 class EntryClient extends Main {
 	public constructor() {
@@ -36,8 +36,7 @@ class EntryClient extends Main {
 	public initState() {
 		// 获取服务端渲染时，注入的__INITIAL_STATE__信息，并同步到客户端的vuex store中
 		window.__INITIAL_STATE__ &&
-			this.store.replaceState(window.__INITIAL_STATE__.store);
-		Vue.prototype.$appConfig = window.__INITIAL_STATE__.appConfig;
+			this.store.restore(window.__INITIAL_STATE__.store);
 	}
 	public getPageData() {
 		const { router, store } = this;

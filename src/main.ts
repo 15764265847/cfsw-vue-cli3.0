@@ -1,7 +1,7 @@
 import Vue, { CreateElement, ComponentOptions } from 'vue';
 import App from './App.vue';
 import Router from './router';
-import Store, { BaseVuexClass } from './store';
+import Store from './store';
 import { Component } from 'vue-property-decorator';
 import BaseConfig from './config';
 import MyButton from '@src/components/mybutton';
@@ -99,10 +99,6 @@ Vue.use(SvgIcon);
 // 		el.focus();
 // 	}
 // });
-interface LocalComponentOptions extends ComponentOptions<Vue> {
-	vuexClass?: BaseVuexClass;
-	basestore?: Store;
-}
 
 @Component<BaseComponents>({})
 class BaseComponents extends Vue {
@@ -122,11 +118,9 @@ export default class Main extends BaseComponents {
 	constructor({ appConfig }: MainOptions) {
 		const store = new Store({ appConfig });
 		const router = new Router();
-		const options: LocalComponentOptions = {
+		const options = {
 			router,
-			store,
-			basestore: store,
-			vuexClass: store.baseVuexClass
+			store
 		};
 		super(options);
 		this.app = this;

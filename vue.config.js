@@ -31,6 +31,9 @@ module.exports = {
 		// 	})
 		// );
 	},
+	pluginOptions: {
+		templatePath: path.resolve(__dirname, './public/index.html')
+	},
 	css: {
 		loaderOptions: {
 			postcss: {

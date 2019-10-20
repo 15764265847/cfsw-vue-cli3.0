@@ -1,5 +1,5 @@
 import DetailApi from '@src/api/detail';
-import VuexClass from 'vuex-class.js';
+import VueLazy from '@src/lib/vue-lazy-store';
 import BaseLoaderData from '@src/common/base-loader-data';
 import BaseConfig from '@src/config';
 
@@ -63,12 +63,7 @@ class ArticDetail extends BaseLoaderData<
 	$RequestSuccess(res: Detail.ArticDetail.Response): this {
 		if (res.code === 0 && res.data) {
 			this.state.requestStatus = 'success';
-			if (!this.state.dataStore[res.data.articId]) {
-				this.state.dataStore[res.data.articId] = new SaveData();
-			}
-			this.state.dataStore[res.data.articId].saveArticMessage({
-				...res.data
-			});
+			this.state.res = res;
 		} else {
 			this.state.requestStatus = 'error';
 		}
@@ -142,20 +137,13 @@ interface DetailOptions {
 	appConfig: BaseConfig;
 }
 
-class Detail extends VuexClass {
+class Detail extends VueLazy.Store {
 	articDetail: ArticDetail;
 	getUserComment: GetUserComment;
 	userComment: UserComment;
 	agreeAuthor: AgreeAuthor;
 	agreeComment: AgreeComment;
 	public api: DetailApi;
-	modules: {
-		articDetail: ArticDetail;
-		userComment: UserComment;
-		agreeAuthor: AgreeAuthor;
-		agreeComment: AgreeComment;
-		getUserComment: GetUserComment;
-	};
 	constructor({ appConfig }: DetailOptions) {
 		super();
 		this.api = new DetailApi({ appConfig });
@@ -164,13 +152,6 @@ class Detail extends VuexClass {
 		(this.userComment = new UserComment(this.api)),
 			(this.agreeAuthor = new AgreeAuthor(this.api)),
 			(this.agreeComment = new AgreeComment(this.api));
-		this.modules = {
-			articDetail: this.articDetail,
-			userComment: this.userComment,
-			agreeAuthor: this.agreeAuthor,
-			agreeComment: this.agreeComment,
-			getUserComment: this.getUserComment
-		};
 	}
 }
 export default Detail;

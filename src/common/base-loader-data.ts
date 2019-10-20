@@ -1,6 +1,6 @@
-import VuexClass from 'vuex-class.js';
+import VueLazy from '@src/lib/vue-lazy-store';
 
-class BaseVuexClass<P, D> extends VuexClass {
+class BaseVuexClass<P, D> extends VueLazy.Store {
 	readonly namespaced: boolean = true;
 	api: any;
 	constructor(api: any) {

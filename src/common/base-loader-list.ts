@@ -1,4 +1,4 @@
-import VuexClass from 'vuex-class.js';
+import VueLazy from '@src/lib/vue-lazy-store';
 
 export interface BaseLoaderResponse {
 	code: number;
@@ -20,7 +20,7 @@ export interface BaseLoaderState {
 	pullDownStatus: BaseLoaderRequestStatus;
 	pullUpStatus: BaseLoaderRequestStatus;
 }
-export default abstract class BaseLoader extends VuexClass {
+export default abstract class BaseLoader extends VueLazy.Store {
 	readonly namespaced: boolean = true;
 	api: any;
 	constructor(api: any) {

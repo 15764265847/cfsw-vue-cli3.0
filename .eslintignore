@@ -8,7 +8,6 @@ config.local.js.rej
 public/*
 src/assets/*
 lib/*
-src/lib/*
 README.md
 src/commom/com-style.css
 src/index.html

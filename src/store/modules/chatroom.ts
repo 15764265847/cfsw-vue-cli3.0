@@ -1,6 +1,6 @@
 import ChatRoomApi from '@src/api/chatroom';
 import BaseLoaderList from '@src/common/base-loader-list';
-import VuexClass from 'vuex-class.js';
+import VueLazy from '@src/lib/vue-lazy-store';
 import BaseLoaderData from '@src/common/base-loader-data';
 import BaseConfig from '@src/config';
 
@@ -31,24 +31,16 @@ export interface ChatRoomOptions {
 	appConfig: BaseConfig;
 }
 
-class ChatRoom extends VuexClass {
+class ChatRoom extends VueLazy.Store {
 	readonly namespaced: boolean = true;
 	public api: ChatRoomApi;
 	articList: ArticList;
 	view: View;
-	modules: {
-		articList: ArticList;
-		view: View;
-	};
 	constructor({ appConfig }: ChatRoomOptions) {
 		super();
 		this.api = new ChatRoomApi({ appConfig });
 		this.articList = new ArticList(this.api);
 		this.view = new View(this.api);
-		this.modules = {
-			articList: this.articList,
-			view: this.view
-		};
 	}
 }
 export default ChatRoom;

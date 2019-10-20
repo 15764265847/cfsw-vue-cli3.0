@@ -17,7 +17,7 @@
 					timestampToDateTime(Number(articMessage.creatAt))
 				}}</span>
 			</div>
-			<div id="artic" v-html="articMessage.msg"></div>
+			<div id="artic" v-html="articData.msg"></div>
 			<div id="comment">
 				<div id="commentitle">评论区</div>
 				<div class="commentul">
@@ -119,10 +119,21 @@ import GeneralHeader from '@src/components/header/general-header.vue';
 import config from '@src/config';
 import { getQueryParams } from '@src/services/publics';
 
-@Component({
+@Component<Detail>({
 	components: {
 		CommentList,
 		GeneralHeader
+	},
+	asyncData: ({ store, route }: any) => {
+		const id = getQueryParams(route.query.id);
+		if (!id) return;
+		const params: Detail.ArticDetail.RequestParams = {
+			id
+		};
+		const { articDetail } = store.detail;
+		// articDetail.$clearData();
+		articDetail.$assignParams(params);
+		return articDetail.getArticDetail();
 	}
 })
 export default class Detail extends Vue {
@@ -145,28 +156,19 @@ export default class Detail extends Vue {
 		return getQueryParams(this.$route.query.id);
 	}
 	get articDetail() {
-		return this.$vuexClass.detail.articDetail;
+		return this.$store.detail.articDetail;
 	}
-	// get headImg() {
-	// 	if (
-	// 		!this.articDetail ||
-	// 		!this.articDetail.dataStore ||
-	// 		!this.articDetail.dataStore[this.id] ||
-	// 		!this.articDetail.dataStore[this.id].articMessage
-	// 	)
-	// 		return 'dsfd';
-	// 	return `${config.BASE_URL}${
-	// 		this.articDetail.dataStore[this.id].articMessage.headimg
-	// 	}`;
-	// }
+	get articData() {
+		return this.articDetail.res.data;
+	}
 	get agreeAuthor() {
-		return this.$vuexClass.detail.agreeAuthor;
+		return this.$store.detail.agreeAuthor;
 	}
 	get userComment() {
-		return this.$vuexClass.detail.userComment;
+		return this.$store.detail.userComment;
 	}
 	get agreeComment() {
-		return this.$vuexClass.detail.agreeComment;
+		return this.$store.detail.agreeComment;
 	}
 	get moreComment() {
 		const { articMessage } = this;

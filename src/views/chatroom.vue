@@ -29,7 +29,6 @@ import Scroller from '@src/components/scroller/scroller.vue';
 import ArticList from '@src/components/artic-list/artic-list.vue';
 import FooterContent from '@src/components/footer/footer.vue';
 import LogoHeader from '@src/components/header/logo-header.vue';
-import { mapGetters } from 'vuex';
 
 @Component({
 	components: {
@@ -41,10 +40,10 @@ import { mapGetters } from 'vuex';
 })
 export default class ChatRoom extends Vue {
 	get articList() {
-		return this.$vuexClass.chatRoom.articList;
+		return this.$store.chatRoom.articList;
 	}
 	get view() {
-		return this.$vuexClass.chatRoom.view;
+		return this.$store.chatRoom.view;
 	}
 	get pullDownStatus() {
 		return this.articList.pullDownStatus;
@@ -168,9 +167,6 @@ export default class ChatRoom extends Vue {
 		return ArticList;
 	}
 
-	mounted() {
-		console.log((this as any).$easyStore, 'wwwwwwwwwwwwwwwwwwwwwwwwwww');
-	}
 	async pullUp() {
 		return this.articList.pullUp();
 	}
