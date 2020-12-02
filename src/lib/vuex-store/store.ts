@@ -57,7 +57,7 @@ export default class Store extends StoreModule {
 
 	public init() {
 		this.getState(null, this);
-		this.modules = reactive(this.modules);
+		// this.modules = reactive(this.modules);
 		// this.reactiveModule();
 	}
 	public reactiveModule() {
@@ -71,14 +71,14 @@ export default class Store extends StoreModule {
 
 	// 添加模块
 	public addMoudles(key: string, module: any): this {
-		if (!module) return this;
-		this.modules[key] = reactive(module);
-		this.modules = reactive(this.modules);
-		Object.defineProperty(this, key, {
-			get() {
-				return this.modules[key];
-			}
-		})
+		// if (!module) return this;
+		// this.modules[key] = reactive(module);
+		// this.modules = reactive(this.modules);
+		// Object.defineProperty(this, key, {
+		// 	get() {
+		// 		return this.modules[key];
+		// 	}
+		// })
 		return this;
 	}
 

@@ -1,5 +1,6 @@
 import { reactive } from 'vue';
 import Store from '../lib/vuex-store';
+import Blog from '@src/modules/blog/store';
 
 export class BaseStore extends Store {
 	b = 0;
@@ -14,13 +15,14 @@ export class BaseStore extends Store {
 	addC() {
 		this.c.e.f++;
 	}
+	public blog = new Blog();
 	public constructor() {
 		super();
 		this.init();
 	}
 }
 
-export default new BaseStore();
+export default reactive(new BaseStore());
 
 declare module '@vue/runtime-core' {
 	export interface ComponentCustomProperties {

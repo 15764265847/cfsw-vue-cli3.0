@@ -104,7 +104,7 @@ export abstract class BaseLoaderList<
 		limit: 9,
 		page: 0
 	} as P;
-	public list: I[] = reactive([]) as I[];
+	public list: I[] = [] as I[];
 	public pullDownStatus: Loader.RequestStatus = 'unrequest';
 	public pullUpStatus: Loader.RequestStatus = 'unrequest';
 	/**
