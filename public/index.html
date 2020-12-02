@@ -3,23 +3,18 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 预先解析DNS -->
+    <link rel="dns-prefetch" href="www.vitaminaq.com">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <meta name="flexible" content="initial-dpr=1" />
-    <link href="../src/common/com-style.css" rel="stylesheet" type="text/css">
-    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
     <title>cfsw</title>
     <style>
         html,body{margin:0px; height:100%; }
-        /* body {
-            position: relative;
-            height: 100%;
-            width: 100%;
-        } */
     </style>
   </head>
   <body>
     <noscript>
-      <strong>We're sorry but cfsw doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
     <script>
@@ -39,6 +34,7 @@
 
             function setRemUnit () {
                 var rem = docEl.clientWidth / 10;
+                if (rem > 102.4) rem = 102.4;
                 docEl.style.fontSize = rem + 'px';
             }
 
@@ -63,7 +59,7 @@
                 docEl.removeChild(fakeBody);
             }
         }(window, document));
-</script>
-    <!-- built files will be auto injected -->
+    </script>
+<!-- <script src="/svg-sprite.js" crossorigin="anonymous" ></script> -->
   </body>
 </html>

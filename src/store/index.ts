@@ -1,63 +1,29 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import VuexClass from 'vuex-class.js';
-import Login from './modules/login';
-import Register from './modules/register';
-import Reset from './modules/reset';
-import ChatRoom from './modules/chatroom';
-import Publish from './modules/publish';
-import Detail from './modules/detail';
+import { reactive } from 'vue';
+import Store from '../lib/vuex-store';
 
-Vue.use(VuexClass);
-Vue.use(Vuex);
-
-export class BaseVuexClass extends VuexClass {
-	readonly namespaced: boolean = true;
-	chatRoom: ChatRoom;
-	detail: Detail;
-	publish: Publish;
-	login: Login;
-	reset: Reset;
-	register: Register;
-	modules: {
-		chatRoom: ChatRoom;
-		detail: Detail;
-		publish: Publish;
-		login: Login;
-		reset: Reset;
-		register: Register;
+export class BaseStore extends Store {
+	b = 0;
+	c = {
+		e: {
+			f: 63
+		}
 	};
-	constructor() {
+	add() {
+		this.b++;
+	}
+	addC() {
+		this.c.e.f++;
+	}
+	public constructor() {
 		super();
-		this.plugins = [VuexClass.init()];
-		this.chatRoom = new ChatRoom();
-		this.detail = new Detail();
-		this.publish = new Publish();
-		this.login = new Login();
-		this.reset = new Reset();
-		this.register = new Register();
-		this.modules = {
-			login: this.login,
-			chatRoom: this.chatRoom,
-			detail: this.detail,
-			publish: this.publish,
-			reset: this.reset,
-			register: this.register
-		};
+		this.init();
 	}
 }
-class LocalStore extends Vuex.Store<BaseVuexClass> {
-	baseVuexClass: BaseVuexClass;
-	constructor() {
-		const baseVuexClass = new BaseVuexClass();
-		super(baseVuexClass);
-		this.baseVuexClass = baseVuexClass;
-	}
-}
-export default LocalStore;
 
-declare module 'vue/types/vue' {
-	interface Vue {
-		$vuexClass: BaseVuexClass;
+export default new BaseStore();
+
+declare module '@vue/runtime-core' {
+	export interface ComponentCustomProperties {
+		$store: BaseStore;
 	}
 }
