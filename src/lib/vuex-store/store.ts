@@ -3,6 +3,9 @@ import {
 	getDescriptors,
 	getPrototypes
 } from './utils';
+import Dep, { SubFunction } from './dep';
+
+export const dep: Dep = new Dep();
 
 export class StoreModule {
  	public constructor() {
@@ -14,6 +17,14 @@ export class StoreModule {
 					...descriptor,
 					value: new Proxy((this as any)[type], {
 						apply(target, thisArg, args) {
+							// console.log('');
+							// console.log(thisArg.path, args, 'iiiiiiiiiiiiiiiiiiiiiiii');
+							// console.log('');
+							dep.notify({
+								path: thisArg.path,
+								params: args,
+								param: args[0]
+							})
 							return target.call(thisArg, ...args);
 						}
 					})
@@ -25,8 +36,6 @@ export class StoreModule {
 }
 
 export default class Store extends StoreModule {
-    public modules: any = {};
-
     public install(_Vue: any, injectKey: string) {
 		_Vue.provide(injectKey || 'store', this)
         _Vue.config.globalProperties.$store = this
@@ -55,8 +64,12 @@ export default class Store extends StoreModule {
 	public addMoudles(key: string, module: any): this {
 		if (!module) return this;
 		(this as any)[key] = module;
-		this.getState(null, this);
+		this.getState(this, (this as any)[key]);
 		return this;
+	}
+
+	public subscribe(callback: SubFunction) {
+		dep.addSub(callback)
 	}
 
 	public replace(store: any) {}

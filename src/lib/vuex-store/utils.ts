@@ -1,22 +1,3 @@
-import { reactive } from 'vue'
-
-export const isNotPro: boolean = process.env.NODE_ENV !== 'production';
-
-export const vueObservable = (target: any) => {
-	target = reactive(target);
-	return;
-}
-
-export const defineMoudle = (localVue: any, target: any, storeModule: any):void => {
-	// const modules = Array.isArray(storeModule) ? storeModule : [storeModule];
-	// modules.forEach((m) => {
-	// 	Object.keys(m).forEach((k) => {
-	// 		localVue.set(target, k, vueObservable(localVue, m[k]));
-	// 	});
-	// });
-	return;
-};
-
 export const getPrototypes = (obj: object, target: object): Array<object> => {
     const prototypes: Array<object> = [];
     let current: object = obj;
