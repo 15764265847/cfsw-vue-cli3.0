@@ -1,5 +1,4 @@
 import { StoreModule } from '@src/lib/vuex-store';
-import { reactive } from 'vue';
 
 export class BaseVueLazy extends StoreModule {}
 
@@ -146,6 +145,7 @@ export abstract class BaseLoaderList<
 	 * 上拉逻辑
 	 */
 	public $pullUpStart(): this {
+		console.log(this);
 		this.pullUpStatus = 'requesting';
 		return this;
 	}

@@ -1,5 +1,3 @@
-import { reactive } from 'vue';
-
 import api, { BlogApi } from '../api';
 import {
 	BaseLoaderData,
@@ -89,9 +87,9 @@ class Blog extends BaseClass<BlogApi> {
 	public getUserComment: GetUserComment;
 	public constructor() {
 		super(api);
-		this.blogList = reactive(new BlogList(this.api));
-		this.blogDetail = reactive(new BlogDetail(this.api));
-		this.getUserComment = reactive(new GetUserComment(this.api));
+		this.blogList = new BlogList(this.api);
+		this.blogDetail = new BlogDetail(this.api);
+		this.getUserComment = new GetUserComment(this.api);
 	}
 }
 export default Blog;

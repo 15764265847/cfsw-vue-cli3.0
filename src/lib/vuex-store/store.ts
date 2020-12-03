@@ -1,13 +1,8 @@
 import { reactive } from 'vue'
 import {
-	vueObservable,
-	defineMoudle,
 	getDescriptors,
 	getPrototypes
 } from './utils';
-
-let localVue: any = null;
-
 
 export class StoreModule {
  	public constructor() {
@@ -15,17 +10,13 @@ export class StoreModule {
 		Object.keys(descriptors).forEach(type => {
 			const descriptor: PropertyDescriptor | undefined = descriptors[type];
 			if (typeof descriptor !== 'undefined' && /^\$/.test(type) && typeof descriptor.value === 'function') {
-				// console.log('================================================');
-				// console.log(descriptor);
-				// console.log('================================================');
 				Object.defineProperty(this, type, {
 					...descriptor,
-					value: (...payloads: Array<any>) => {
-						const value = descriptor.value.apply(this, payloads);
-						// dispatch(type, ...payloads);
-						console.log((this as any).path + '.' + type, payloads, 'wwwwwwwwwwwwwwwwwwwwww');
-						return value;
-					}
+					value: new Proxy((this as any)[type], {
+						apply(target, thisArg, args) {
+							return target.call(thisArg, ...args);
+						}
+					})
 				});
 				return;
 			}
@@ -57,28 +48,14 @@ export default class Store extends StoreModule {
 
 	public init() {
 		this.getState(null, this);
-		// this.modules = reactive(this.modules);
-		// this.reactiveModule();
-	}
-	public reactiveModule() {
-		// console.log(Object.keys(this));
-		// Object.keys(this).forEach((key) => {
-		// 	const k = (this as any)[key];
-		// 	if (typeof k !== 'object') return;
-        //     this.modules[key] = reactive(k);
-		// })
+		return reactive(this);
 	}
 
 	// 添加模块
 	public addMoudles(key: string, module: any): this {
-		// if (!module) return this;
-		// this.modules[key] = reactive(module);
-		// this.modules = reactive(this.modules);
-		// Object.defineProperty(this, key, {
-		// 	get() {
-		// 		return this.modules[key];
-		// 	}
-		// })
+		if (!module) return this;
+		(this as any)[key] = module;
+		this.getState(null, this);
 		return this;
 	}
 

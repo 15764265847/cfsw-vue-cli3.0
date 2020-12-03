@@ -43,7 +43,7 @@ export default defineComponent({
 	},
 	async mounted() {
 		await this.onSee();
-		// this.timer = setInterval(this.onSee, 500);
+		this.timer = setInterval(this.onSee, 500);
 	},
 	methods: {
 		async reload() {

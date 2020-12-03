@@ -5,9 +5,9 @@ import { h } from 'vue';
 const registerStoreModule = (storeModule: any) => {
 	const name: string = storeModule.default.moduleName;
 
-	// if (!(store as any)[name]) {
-	// 	store.addMoudles(name, new storeModule.default());
-	// }
+	if (!(store as any)[name]) {
+		store.addMoudles(name, new storeModule.default());
+	}
 };
 
 export const baseRouteView = (storeModule: any) => {

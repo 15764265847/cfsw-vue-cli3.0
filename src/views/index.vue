@@ -1,5 +1,5 @@
 <template>
-	<div class="index" @click="add">index页面{{ count }}</div>
+	<div class="index">index页面</div>
 	<div @click="to">去列表</div>
 </template>
 
@@ -8,18 +8,7 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
 	name: 'index',
-	computed: {
-		count() {
-			return this.$store.c.e.f;
-		}
-	},
-	mounted() {
-		console.log(this.$store);
-	},
 	methods: {
-		add() {
-			this.$store.addC();
-		},
 		to() {
 			this.$router.push({ name: 'blog-home' });
 		}
@@ -28,6 +17,6 @@ export default defineComponent({
 </script>
 <style lang="less" scoped>
 .index {
-	font-size: 20px;
+	font-size: 37.5px;
 }
 </style>

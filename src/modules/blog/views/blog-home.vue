@@ -1,7 +1,7 @@
 <template>
 	<div class="chatroom">
 		<LogoHeader />
-		<div class="wrapper" ref="blogHome" v-if="articList">
+		<div class="wrapper" ref="blogHome" v-if="blogList">
 			<scroller
 				@pullUp="pullUp"
 				:pullUpstatus="pullUpStatus"
@@ -35,7 +35,7 @@ export default defineComponent({
 		FooterContent
 	},
 	computed: {
-		articList() {
+		blogList() {
 			return this.$store.blog.blogList;
 		},
 		pullDownStatus() {
@@ -50,13 +50,10 @@ export default defineComponent({
 	},
 	mounted() {
 		console.log(this);
-		// setTimeout(() => {
-		// 	this.$forceUpdate();
-		// }, 3000);
 	},
 	methods: {
 		async pullUp() {
-			return this.articList.pullUp();
+			return this.blogList.pullUp();
 		}
 	}
 	// public get articList() {
