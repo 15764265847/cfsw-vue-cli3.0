@@ -1,6 +1,6 @@
-import { StoreModule } from '@src/lib/vuex-store';
+import { StoreOberser } from '@src/lib/vuex-store';
 
-export class BaseVueLazy extends StoreModule {}
+export class BaseVueLazy extends StoreOberser {}
 
 /**
  * 基本类

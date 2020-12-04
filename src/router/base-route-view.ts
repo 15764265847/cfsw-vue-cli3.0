@@ -4,9 +4,8 @@ import { h } from 'vue';
 
 const registerStoreModule = (storeModule: any) => {
 	const name: string = storeModule.default.moduleName;
-
 	if (!(store as any)[name]) {
-		store.addMoudles(name, new storeModule.default());
+		store.addMoudle(name, new storeModule.default());
 	}
 };
 

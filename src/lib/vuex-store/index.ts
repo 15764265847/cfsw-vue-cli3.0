@@ -1,2 +1,2 @@
-import Store, { StoreModule } from './store';
-export { Store as default, StoreModule }
+import Store, { StoreOberser } from './store';
+export { Store as default, StoreOberser }
