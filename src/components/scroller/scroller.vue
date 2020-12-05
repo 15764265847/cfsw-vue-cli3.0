@@ -1,5 +1,5 @@
 <template>
-	<div ref="my_scroll" class="my_scroll">
+	<div class="my_scroll">
 		<slot></slot>
 		<see-loading @pullUp="pullUp" :pullUpstatus="pullUpstatus">
 			<div slot="empty">

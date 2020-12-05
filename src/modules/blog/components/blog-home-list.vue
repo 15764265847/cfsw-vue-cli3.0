@@ -1,5 +1,5 @@
 <template>
-	<div class="list-item">
+	<div class="list-item" @click="toDetail">
 		<div class="list-content">
 			<div class="artic-content">
 				<div class="user-img">
@@ -64,6 +64,9 @@ export default defineComponent({
 	methods: {
 		time(creatAt: string) {
 			return timeFormat(Number(creatAt));
+		},
+		toDetail() {
+			this.$router.push({ name: 'index' });
 		}
 	}
 });

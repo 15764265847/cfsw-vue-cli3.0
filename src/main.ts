@@ -3,7 +3,7 @@ import App from './App.vue';
 import './registerServiceWorker';
 import router from './router';
 import store from './store';
-import VueRescroll from 'vue-rescroll';
+import VueRescroll from '@src/lib/vue-rescroll';
 
 // store.subscribe((op) => {
 // 	console.log('我是订阅');
