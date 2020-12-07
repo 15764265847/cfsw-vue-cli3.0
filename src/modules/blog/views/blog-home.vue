@@ -6,7 +6,7 @@
 				@pullUp="pullUp"
 				:pullUpstatus="pullUpStatus"
 				:pullDownStatus="pullDownStatus"
-				v-rescroll="{ name: 'chatroom', storageMode: 'localstorage' }"
+				v-rescroll="{ name: 'chatroom' }"
 			>
 				<ul>
 					<BlogHomeList

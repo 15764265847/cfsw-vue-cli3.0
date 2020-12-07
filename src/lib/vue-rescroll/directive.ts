@@ -1,17 +1,28 @@
-import { VNode, Plugin, App, DirectiveHook, DirectiveBinding, ObjectDirective, ComponentPublicInstance } from 'vue';
+import {
+	VNode,
+	Plugin,
+	App,
+	DirectiveHook,
+	DirectiveBinding,
+	ObjectDirective,
+	ComponentPublicInstance
+} from 'vue';
 import RestoreScroll, { RestoreScrollOptions } from './vue-rescroll';
 
+export type ScrollType = 'window' | 'default';
 export type StorageMode = 'localstorage' | 'default';
+export type DomType = 'tab' | 'default';
 
 export interface Value {
 	name: string;
-	type?: 'window' | 'local';
+	type?: ScrollType;
 	storageMode?: StorageMode;
-	domType?: 'tab' | 'default';
+	domType?: DomType;
 }
 
 export interface DirectiveHTMLElement extends HTMLElement {
 	restoreScroll?: any;
+	currentScrollName: string;
 }
 
 export interface VueRoot extends ComponentPublicInstance {
@@ -19,9 +30,12 @@ export interface VueRoot extends ComponentPublicInstance {
 }
 
 let nowName: string = '';
-const fun: DirectiveHook = (el: DirectiveHTMLElement, binding: DirectiveBinding<Value>, vnode: VNode, prevVNode: VNode | null) => {
+const fun: DirectiveHook = (
+	el: DirectiveHTMLElement,
+	binding: DirectiveBinding<Value>,
+	vnode: VNode
+) => {
 	if (!binding.value) throw Error('please set required parameters');
-	nowName = binding.value.name;
 	const { dirs } = vnode;
 	if (!dirs || !dirs.length) return;
 	const { instance } = dirs[0];
@@ -29,7 +43,13 @@ const fun: DirectiveHook = (el: DirectiveHTMLElement, binding: DirectiveBinding<
 	const root: VueRoot | null = instance.$root;
 	if (!root) return;
 	let options: RestoreScrollOptions;
-	const { name, type = '', storageMode = 'default', domType = '' } = binding.value;
+	const {
+		name,
+		type = 'default',
+		storageMode = 'default',
+		domType = 'default'
+	} = binding.value;
+	el.currentScrollName = name;
 	if (!name) throw Error('please set name');
 	options = {
 		dom: el,
@@ -37,20 +57,18 @@ const fun: DirectiveHook = (el: DirectiveHTMLElement, binding: DirectiveBinding<
 		type,
 		storageMode,
 		instance
-	};
-	if (binding.value.storageMode !== 'localstorage') {
+	} as RestoreScrollOptions;
+	if (storageMode !== 'localstorage') {
 		!root.$rescroll && (root.$rescroll = {});
-		options.rescroll = root.$rescroll;
 	}
 	!el.restoreScroll && (el.restoreScroll = {});
 
-	if (!el.restoreScroll[nowName]) {
-	    console.log(options, 'tttttttttttttttttttttttttttt');
-		el.restoreScroll[nowName] = new RestoreScroll(options);
+	if (!el.restoreScroll[name]) {
+		el.restoreScroll[name] = new RestoreScroll(options);
 		return;
 	}
-	if (domType && domType === 'tab') 
-		return el.restoreScroll[nowName].update(options);
+	if (domType === 'tab')
+		return el.restoreScroll[name].update();
 };
 export const directive: ObjectDirective = {
 	mounted: function(
@@ -60,6 +78,15 @@ export const directive: ObjectDirective = {
 		prevVNode: VNode | null
 	) {
 		console.log('mounted');
+		return fun(el, binding, vnode, prevVNode);
+	},
+	updated: function(
+		el: DirectiveHTMLElement,
+		binding: DirectiveBinding<Value>,
+		vnode: VNode,
+		prevVNode: VNode | null
+	) {
+		console.log('updated');
 		return fun(el, binding, vnode, prevVNode);
 	},
 	beforeUnmount(el: DirectiveHTMLElement) {
@@ -90,3 +117,4 @@ declare global {
 		Vue: App;
 	}
 }
+
