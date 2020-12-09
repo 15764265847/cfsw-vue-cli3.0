@@ -1,7 +1,7 @@
 <template>
 	<div class="chatroom">
 		<LogoHeader />
-		<div class="wrapper" ref="blogHome" v-if="blogList">
+		<!-- <div class="wrapper" ref="blogHome" v-if="blogList">
 			<scroller
 				@pullUp="pullUp"
 				:pullUpstatus="pullUpStatus"
@@ -16,7 +16,10 @@
 					/>
 				</ul>
 			</scroller>
-		</div>
+		</div> -->
+		<vueVirtualScroll :list="list" ownKey="articId">
+			<div>1111111</div>
+		</vueVirtualScroll>
 		<FooterContent />
 	</div>
 </template>
@@ -26,13 +29,15 @@ import Scroller from '@src/components/scroller/scroller.vue';
 import BlogHomeList from '../components/blog-home-list.vue';
 import FooterContent from '@src/components/footer/footer.vue';
 import LogoHeader from '@src/components/header/logo-header.vue';
+import vueVirtualScroll from '@src/lib/vue-virtual-scroll/vue-virtual-scroll.vue';
 
 export default defineComponent({
 	components: {
 		LogoHeader,
-		Scroller,
-		BlogHomeList,
-		FooterContent
+		// Scroller,
+		// BlogHomeList,
+		FooterContent,
+		vueVirtualScroll
 	},
 	computed: {
 		blogList() {
@@ -49,7 +54,7 @@ export default defineComponent({
 		}
 	},
 	mounted() {
-		console.log(this);
+		this.pullUp();
 	},
 	methods: {
 		async pullUp() {

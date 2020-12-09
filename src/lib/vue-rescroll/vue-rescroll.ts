@@ -74,7 +74,7 @@ export default class RestoreScroll {
 		tag.addEventListener('scroll', this.watchScroll, false);
 		return this;
 	}
-	public scrollTo(): this {
+	public async scrollTo(): Promise<this> {
 		const { dom, name, type, root, storageMode, instance } = this.opt;
 		let position;
 		if (storageMode === 'localstorage') {
