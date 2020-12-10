@@ -17,8 +17,29 @@
 				</ul>
 			</scroller>
 		</div> -->
-		<vueVirtualScroll :list="list" ownKey="articId">
-			<div>1111111</div>
+		<vueVirtualScroll
+			:list="[
+				...list,
+				...list,
+				...list,
+				...list,
+				...list,
+				...list,
+				...list,
+				...list,
+				...list,
+				...list,
+				...list,
+				...list,
+				...list,
+				...list,
+				...list,
+				...list
+			]"
+		>
+			<template v-slot:default="slotProps">
+				<BlogHomeList :item="slotProps.item" />
+			</template>
 		</vueVirtualScroll>
 		<FooterContent />
 	</div>
@@ -35,7 +56,7 @@ export default defineComponent({
 	components: {
 		LogoHeader,
 		// Scroller,
-		// BlogHomeList,
+		BlogHomeList,
 		FooterContent,
 		vueVirtualScroll
 	},
@@ -54,6 +75,7 @@ export default defineComponent({
 		}
 	},
 	mounted() {
+		if (this.list.length) return;
 		this.pullUp();
 	},
 	methods: {
