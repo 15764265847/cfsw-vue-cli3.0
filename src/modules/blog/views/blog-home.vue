@@ -1,7 +1,7 @@
 <template>
 	<div class="chatroom">
 		<LogoHeader />
-		<!-- <div class="wrapper" ref="blogHome" v-if="blogList">
+		<div class="wrapper" ref="blogHome" v-if="blogList">
 			<scroller
 				@pullUp="pullUp"
 				:pullUpstatus="pullUpStatus"
@@ -16,8 +16,8 @@
 					/>
 				</ul>
 			</scroller>
-		</div> -->
-		<vueVirtualScroll
+		</div>
+		<!-- <vueVirtualScroll
 			:list="[
 				...list,
 				...list,
@@ -40,7 +40,7 @@
 			<template v-slot:default="slotProps">
 				<BlogHomeList :item="slotProps.item" />
 			</template>
-		</vueVirtualScroll>
+		</vueVirtualScroll> -->
 		<FooterContent />
 	</div>
 </template>
@@ -50,18 +50,23 @@ import Scroller from '@src/components/scroller/scroller.vue';
 import BlogHomeList from '../components/blog-home-list.vue';
 import FooterContent from '@src/components/footer/footer.vue';
 import LogoHeader from '@src/components/header/logo-header.vue';
-import vueVirtualScroll from '@src/lib/vue-virtual-scroll/vue-virtual-scroll.vue';
+// import vueVirtualScroll from '@src/lib/vue-virtual-scroll/vue-virtual-scroll.vue';
 
 export default defineComponent({
 	components: {
 		LogoHeader,
-		// Scroller,
+		Scroller,
 		BlogHomeList,
-		FooterContent,
-		vueVirtualScroll
+		FooterContent
+		// vueVirtualScroll
+	},
+	data() {
+		return {
+			itemComponent: BlogHomeList
+		};
 	},
 	computed: {
-		blogList() {
+		blogList(): any {
 			return this.$store.blog.blogList;
 		},
 		pullDownStatus() {
