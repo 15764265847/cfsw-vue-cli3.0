@@ -1,12 +1,11 @@
 <template>
     <div class="virtual-scroll" ref="virtualScroll" @scroll="onScroll">
         <ul class="list" :style="{ height: `${scrollHeight}px` }">
-            <!-- <li ref="topObserve" data-type="topObserve" class="observe top-observe" :style="{ transform: `translateY(${topObserveY}px)`}"></li> -->
-            <li ref="virtualTop"></li>
             <VueVirtualScrollItem
                 v-for="item in realList"
                 :key="item.key"
                 :item="item"
+                :scrollNum="getItemScrollNum(item.index)"
                 @updateHeight="updateHeight"
             >
                 <template v-slot:default="slotProps">
@@ -14,7 +13,6 @@
                 </template>
             </VueVirtualScrollItem>
 	    </ul>
-        <!-- <div ref="bottomObserve" data-type="bottomObserve" class="observe"></div> -->
     </div>
 </template>
 <script lang="ts">
@@ -29,19 +27,14 @@ interface PoolItem {
 interface LocalListItem {
     index: number; // 索引
     key: string | number; // 唯一key值
-    height: number; // item高度
-    active: boolean; // 
-    scrollY: number; // 离顶部距离
     contain: any;
 }
 
 interface Data {
-    localList: LocalListItem[];
-    intersectionObserver: any;
     startIndex: number;
     virtualTop: number;
-    isDown: boolean;
-    timer: number;
+    itemMap: Map<number, number>;
+    lastOver: number;
 }
 
 export default defineComponent({
@@ -59,130 +52,113 @@ export default defineComponent({
             type: String,
             default: ''
         },
+        // 缓冲
+        buffer: {
+            type: Number,
+            default: 10
+        },
         // 长度
         activeLen: {
             type: Number,
-            default: 20
+            default: 30
         }
     },
     computed: {
         len(): number {
             return this.list.length;
         },
-        scrollHeight(): number {
-            if (!this.endIndex || !this.len || !this.localList.length) return 0;
-            const end = this.localList[this.endIndex];
-            // console.log(this.endIndex, this.localList, end, 'tttttttttttttttttttttttttt');
-            return end.scrollY + end.height;
-        },
-        realList(): LocalListItem[] {
-            return this.localList.filter((i) => i.active);
+        localList():LocalListItem[] {
+            return this.list.map((v, i) => {
+                return {
+                    index: i,
+                    key: i,
+                    contain: v
+                }
+            });
         },
         endIndex(): number {
             return this.startIndex + this.activeLen;
         },
-        topObserveY(): number {
-            if (!this.endIndex || !this.len || !this.localList.length || !this.localList[this.startIndex]) return 0;
-            return this.localList[this.startIndex].scrollY - 1;
-        }
-    },
-    watch: {
-        len(val) {
-            this.updateList();
-        },
-        startIndex() {
-            this.updateList();
-        },
-        virtualTop(val, oldval) {
-            if (val - oldval > 0) {
-                this.isDown = true;
-            } else {
-                this.isDown = false;
+        // 先初始高度，再矫正
+        scrollHeight(): number {
+            let total = 0;
+            if (this.startIndex === this.len) {
+                this.itemMap.forEach(i => {
+                    total = total + i;
+                })
             }
-        }
+            const r = this.itemMap.get(0) || 0;
+            const rt = r * this.len;
+            if (total < rt) {
+                total = rt;
+            }
+            return total;
+        },
+        realList(): LocalListItem[] {
+            return this.localList.slice(this.startIndex, this.endIndex);
+        },
     },
     data(): Data {
         return {
-            localList: [],
-            intersectionObserver: null,
             startIndex: 0,
             virtualTop: 0,
-            isDown: true,
-            timer: 0
+            itemMap: new Map(),
+            lastOver: 0
         }
     },
     async mounted() {
         await this.$nextTick();
-        // this.intersectionObserver = new IntersectionObserver(
-		// 	(entries: IntersectionObserverEntry[]) => {
-        //         entries.forEach(entrie => {
-        //         //    this.updateList();
-        //             this.visible(entrie);
-        //         })
-		// 	},
-		// 	{
-        //         root: (this as any).$refs.virtualScroll,
-        //         rootMargin: '400px 0px',
-        //         threshold: 0
-        //     }
-		// );
-        // this.intersectionObserver.observe(this.$refs.bottomObserve);
-        // this.intersectionObserver.observe(this.$refs.topObserve);
-        this.updateList();
+        // this.updateList();
     },
     methods: {
         updateHeight(h: number, i: number) {
-            this.localList[i].height = h;
-            this.localList[i].scrollY = !i ? 0 : this.localList[i-1].height + this.localList[i - 1].scrollY;
+            this.itemMap.set(i, h);
         },
-        visible(entrie: IntersectionObserverEntry) {
-            if (!this.virtualTop) return;
-            const { type } = (entrie as any).target.dataset;
-            const { isIntersecting } = entrie;
-            // 尾部触发
-            if (type === 'bottomObserve') {
-                if (isIntersecting && this.startIndex < 155) {
-                    this.startIndex ++;
-                }
-            } 
-            if (type === 'topObserve') {
-                if (isIntersecting) {
-                    this.startIndex --;
-                }
+        getItemMap(i: number) {
+            return this.itemMap.get(i) || 0;
+        },
+        getItemScrollNum(idx: number) {
+            let total = 0;
+            if (!idx) return total;
+            for (let i = 0; i < idx; i++) {
+                const h = this.itemMap.get(i);
+                if (!h) break;
+                total = total + h;
             }
-        },
-        updateList() {
-            this.localList = this.list.map((item: any, i) => {
-                return {
-                    index: i,
-                    key: this.ownKey ? String(item[this.ownKey]) : String(i),
-                    height: this.localList[i] ? this.localList[i].height : 0,
-                    active: i >= this.startIndex && i <= this.endIndex ? true : false,
-                    scrollY: this.localList[i] ? this.localList[i].scrollY : 0,
-                    contain: item
-                }
-            });
+            return total;
         },
         onScroll(e: any) {
-                const { scrollTop, offsetHeight, scrollHeight } = e.target;
-                this.virtualTop = scrollTop;
-                if (this.isDown) {
-                    if (scrollTop + offsetHeight > scrollHeight - 1000 && this.startIndex < 155) {
-                        this.startIndex ++;
-                    }
-                } else {
-                    if (!this.startIndex) return;
-                    const y = this.localList[this.startIndex].scrollY
-                    if (scrollTop - y < 1500) {
-                        this.startIndex --;
-                        console.log(this.startIndex);
-                    }
-                }             
+            const { scrollTop, offsetHeight, scrollHeight } = e.target;
+            const isDown = this.virtualTop < scrollTop;
+            this.virtualTop = scrollTop;
+            const overIndex = this.getOver(scrollTop);
+            if (overIndex == this.lastOver) return;
+            this.lastOver = overIndex;
+
+            if (isDown) {
+                if (this.endIndex - overIndex > this.buffer) return;
+                this.startIndex = this.startIndex + this.buffer;
+            } else {
+                if (!this.startIndex) return;
+                if (overIndex - this.startIndex > this.buffer) return;
+                this.startIndex = this.startIndex - this.buffer;
+            }             
+        },
+        // 计算触发的边界值
+        getOver(scrollTop: number) {
+            let index = 0;
+
+            for (let i = this.startIndex; i <= this.endIndex; i++) {
+                const r = this.itemMap.get(i);
+                const scrollNum = this.getItemScrollNum(i);
+                if (!r) break;
+                if (scrollTop > scrollNum && scrollTop < scrollNum + r) {
+                    index = i;
+                    break;
+                }
+            }
+            return index;
         }
-    },
-    beforeUnmount() {
-        // this.intersectionObserver.unobserve(this.$refs.bottomObserve);
-        // this.intersectionObserver.unobserve(this.$refs.topObserve);
     }
 });
 </script>
