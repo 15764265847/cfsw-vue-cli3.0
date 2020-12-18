@@ -1,6 +1,7 @@
 <template>
     <div class="virtual-scroll" ref="virtualScroll" @scroll="onScroll">
-        <ul class="list" :style="{ height: `${scrollHeight}px` }">
+        <slot name="header" />
+        <ul class="list" :style="{ height: `${scrollHeight || cacheHeight}px` }">
             <VueVirtualScrollItem
                 v-for="item in realList"
                 :key="item.key"
@@ -13,11 +14,28 @@
                 </template>
             </VueVirtualScrollItem>
 	    </ul>
+        <slot name="footer" />
     </div>
 </template>
 <script lang="ts">
-import { defineComponent, watch, reactive, onMounted } from 'vue';
+import { defineComponent } from 'vue';
 import VueVirtualScrollItem from './vue-virtual-scroll-item.vue';
+
+
+interface ScrollInfo {
+    startIndex: number;
+    virtualTop: number;
+    cacheHeight: number;
+    itemMap: Map<number, number>;
+}
+
+declare module '@vue/runtime-core' {
+	export interface ComponentCustomProperties {
+		$virtualScroll: {
+            [key: string]: ScrollInfo;
+        };
+	}
+}
 
 interface PoolItem {
     height: number; // 高度
@@ -35,6 +53,7 @@ interface Data {
     virtualTop: number;
     itemMap: Map<number, number>;
     lastOver: number;
+    cacheHeight: number;
 }
 
 export default defineComponent({
@@ -61,6 +80,11 @@ export default defineComponent({
         activeLen: {
             type: Number,
             default: 30
+        },
+        // 需要保存滚动状态的key
+        reScrollKey: {
+            type: String,
+            default: ''
         }
     },
     computed: {
@@ -68,10 +92,11 @@ export default defineComponent({
             return this.list.length;
         },
         localList():LocalListItem[] {
-            return this.list.map((v, i) => {
+            const { ownKey } = this;
+            return this.list.map((v: any, i) => {
                 return {
                     index: i,
-                    key: i,
+                    key: ownKey ? v[ownKey] : i,
                     contain: v
                 }
             });
@@ -79,19 +104,11 @@ export default defineComponent({
         endIndex(): number {
             return this.startIndex + this.activeLen;
         },
-        // 先初始高度，再矫正
         scrollHeight(): number {
             let total = 0;
-            if (this.startIndex === this.len) {
-                this.itemMap.forEach(i => {
-                    total = total + i;
-                })
-            }
-            const r = this.itemMap.get(0) || 0;
-            const rt = r * this.len;
-            if (total < rt) {
-                total = rt;
-            }
+            this.itemMap.forEach(i => {
+                total = total + i;
+            })
             return total;
         },
         realList(): LocalListItem[] {
@@ -103,12 +120,22 @@ export default defineComponent({
             startIndex: 0,
             virtualTop: 0,
             itemMap: new Map(),
-            lastOver: 0
+            lastOver: 0,
+            cacheHeight: 0
         }
     },
+    created() {
+        if (!this.$root || !this.$root.$virtualScroll || this.reScrollKey) return;
+        const { startIndex, cacheHeight, itemMap } = this.$root.$virtualScroll[this.reScrollKey];
+        this.cacheHeight = cacheHeight;
+        this.startIndex = startIndex;
+        this.itemMap = itemMap;
+    },
     async mounted() {
+        if (!this.$root || !this.$root.$virtualScroll) return;
+        const { virtualTop } = this.$root.$virtualScroll;
         await this.$nextTick();
-        // this.updateList();
+        this.$el.scrollTop = virtualTop;
     },
     methods: {
         updateHeight(h: number, i: number) {
@@ -147,7 +174,6 @@ export default defineComponent({
         // 计算触发的边界值
         getOver(scrollTop: number) {
             let index = 0;
-
             for (let i = this.startIndex; i <= this.endIndex; i++) {
                 const r = this.itemMap.get(i);
                 const scrollNum = this.getItemScrollNum(i);
@@ -158,6 +184,18 @@ export default defineComponent({
                 }
             }
             return index;
+        },
+    },
+    beforeUnmount() {
+        if (!this.$root || !this.reScrollKey) return;
+        if (!this.$root.$virtualScroll) {
+            this.$root.$virtualScroll = {} as any;
+        }
+        this.$root.$virtualScroll[this.reScrollKey] = {
+            startIndex: this.startIndex,
+            virtualTop: this.virtualTop,
+            cacheHeight: this.scrollHeight,
+            itemMap: this.itemMap
         }
     }
 });

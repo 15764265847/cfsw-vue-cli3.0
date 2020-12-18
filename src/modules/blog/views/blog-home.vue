@@ -17,28 +17,17 @@
 				</ul>
 			</scroller>
 		</div> -->
-		<vueVirtualScroll
-			:list="[
-				...list,
-				...list,
-				...list,
-				...list,
-				...list,
-				...list,
-				...list,
-				...list,
-				...list,
-				...list,
-				...list,
-				...list,
-				...list,
-				...list,
-				...list,
-				...list
-			]"
-		>
+		<vueVirtualScroll :list="list" reScrollKey="blogHome">
 			<template v-slot:default="slotProps">
-				<BlogHomeList :item="slotProps.item" />
+				<!-- <BlogHomeList :item="slotProps.item" /> -->
+				<div @click="toDetail">{{ slotProps.item }}</div>
+			</template>
+			<template v-slot:footer>
+				<SeeLoading
+					@pullUp="pullUp"
+					:pullUpstatus="pullUpStatus"
+					:pullDownStatus="pullDownStatus"
+				/>
 			</template>
 		</vueVirtualScroll>
 		<FooterContent />
@@ -47,6 +36,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import Scroller from '@src/components/scroller/scroller.vue';
+import SeeLoading from '@src/components/scroller/see-loading.vue';
 import BlogHomeList from '../components/blog-home-list.vue';
 import FooterContent from '@src/components/footer/footer.vue';
 import LogoHeader from '@src/components/header/logo-header.vue';
@@ -58,11 +48,12 @@ export default defineComponent({
 		// Scroller,
 		BlogHomeList,
 		FooterContent,
-		vueVirtualScroll
+		vueVirtualScroll,
+		SeeLoading
 	},
 	data() {
 		return {
-			itemComponent: BlogHomeList
+			localList: []
 		};
 	},
 	computed: {
@@ -76,16 +67,23 @@ export default defineComponent({
 			return this.$store.blog.blogList.pullUpStatus;
 		},
 		list() {
-			return this.$store.blog.blogList.list;
+			return this.$store.blog.blogList.list1;
 		}
 	},
 	mounted() {
-		if (this.list.length) return;
-		this.pullUp();
+		// if (this.list.length) return;
+		// this.pullUp();
 	},
 	methods: {
 		async pullUp() {
-			return this.blogList.pullUp();
+			// (this as any).localList = (this as any).localList.concat(
+			// 	Array.from({ length: 10 }, (v, i) => i)
+			// );
+			// console.log(this.localList);
+			return this.blogList.pullUp1();
+		},
+		toDetail() {
+			this.$router.push({ name: 'index' });
 		}
 	}
 	// public get articList() {

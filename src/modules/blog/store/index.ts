@@ -18,6 +18,11 @@ class BlogList extends BaseLoaderList<
 > {
 	public count = 0;
 
+	public list1: number[] = [];
+	public pullUp1() {
+		this.list1 = this.list1.concat(Array.from({ length: 10 }, (v, i) => i));
+	}
+
 	public baseAjaxMethod(): Promise<Loader.Response> {
 		return this.api.getArtic(this.params);
 	}
