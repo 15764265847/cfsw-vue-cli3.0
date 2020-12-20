@@ -21,6 +21,9 @@
 				</div>
 			</div>
 			<div class="artic-msg-content" v-html="articInfo"></div>
+			<div class="image-contain">
+                <img v-for="img in imgList" :key="img" :src="img" />
+			</div>
 			<div class="oparate-num">
 				<div>
 					<!-- <svg-icon name="view" /> -->
@@ -45,7 +48,7 @@ import { timeFormat } from '@src/utils/filter';
 export default defineComponent({
 	props: {
 		item: {
-			type: Object as PropType<Loader.ListItem>,
+			type: Object as any,
 			default: () => {
 				return;
 			}
@@ -62,6 +65,10 @@ export default defineComponent({
 			const { msg } = this.item;
 			if (msg.length > 80) return `${msg.slice(0, 79)}...`;
 			return msg.slice(0, 80);
+		},
+		imgList(): string[] {
+			// return this.item.imgList.slice(0, 3);
+			return ['https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=4024133959,3421323374&fm=26&gp=0.jpg', 'https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2408640314,1202216066&fm=26&gp=0.jpg']
 		}
 	},
 	methods: {
@@ -163,6 +170,14 @@ export default defineComponent({
 				}
 			}
 		}
+	}
+}
+.image-contain {
+	display: flex;
+
+	&>img {
+		height: 80px;
+		flex: 1;
 	}
 }
 </style>

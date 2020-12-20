@@ -1,5 +1,5 @@
 <template>
-    <div class="virtual-scroll" ref="virtualScroll" @scroll="onScroll">
+    <div class="virtual-scroll" ref="virtualScroll">
         <slot name="header" />
         <ul class="list" :style="{ height: `${scrollHeight || cacheHeight}px` }">
             <VueVirtualScrollItem
@@ -52,8 +52,10 @@ interface Data {
     startIndex: number;
     virtualTop: number;
     itemMap: Map<number, number>;
+    scrollMap: Map<number, number>;
     lastOver: number;
     cacheHeight: number;
+    timerId: number;
 }
 
 export default defineComponent({
@@ -120,8 +122,10 @@ export default defineComponent({
             startIndex: 0,
             virtualTop: 0,
             itemMap: new Map(),
+            scrollMap: new Map(),
             lastOver: 0,
-            cacheHeight: 0
+            cacheHeight: 0,
+            timerId: 0
         }
     },
     created() {
@@ -132,13 +136,16 @@ export default defineComponent({
         this.itemMap = itemMap;
     },
     async mounted() {
+        await this.$nextTick();
+        this.listen();
         if (!this.$root || !this.$root.$virtualScroll) return;
         const { virtualTop } = this.$root.$virtualScroll;
-        await this.$nextTick();
         this.$el.scrollTop = virtualTop;
     },
     methods: {
         updateHeight(h: number, i: number) {
+            const r = this.getItemMap(i);
+            if (r === h) return;
             this.itemMap.set(i, h);
         },
         getItemMap(i: number) {
@@ -152,41 +159,61 @@ export default defineComponent({
                 if (!h) break;
                 total = total + h;
             }
+            this.scrollMap.set(idx, total);
             return total;
         },
-        onScroll(e: any) {
-            const { scrollTop, offsetHeight, scrollHeight } = e.target;
+        listen() {
+            const { scrollTop, offsetHeight, scrollHeight } = this.$el;
             const isDown = this.virtualTop < scrollTop;
             this.virtualTop = scrollTop;
             const overIndex = this.getOver(scrollTop);
-            if (overIndex == this.lastOver) return;
-            this.lastOver = overIndex;
+            if (overIndex !== this.lastOver && overIndex) {
+                // 计算滚动的条目
+                const n = Math.ceil(Math.abs((overIndex - this.lastOver) / this.buffer));
+                this.lastOver = overIndex;
 
-            if (isDown) {
-                if (this.endIndex - overIndex > this.buffer) return;
-                this.startIndex = this.startIndex + this.buffer;
-            } else {
-                if (!this.startIndex) return;
-                if (overIndex - this.startIndex > this.buffer) return;
-                this.startIndex = this.startIndex - this.buffer;
-            }             
+                // 向下滚，保存其信息
+                if (isDown) {
+                    if (this.endIndex - overIndex <= this.buffer) {
+                        this.startIndex = this.startIndex + this.buffer * n;
+                    };
+                    
+                } else {
+                    if (this.startIndex && overIndex - this.startIndex <= this.buffer) {
+                        this.startIndex = this.startIndex - this.buffer * n;
+                    }
+                }
+            }
+            this.timerId = requestAnimationFrame(this.listen.bind(this));
         },
         // 计算触发的边界值
         getOver(scrollTop: number) {
-            let index = 0;
-            for (let i = this.startIndex; i <= this.endIndex; i++) {
+            let i = this.startIndex;
+            let scrollNum = this.scrollMap.get(i) || this.getItemScrollNum(i);
+
+            while(i <= this.endIndex) {
                 const r = this.itemMap.get(i);
-                const scrollNum = this.getItemScrollNum(i);
-                if (!r) break;
+                if (typeof r === 'undefined' || typeof scrollNum === 'undefined') break;
                 if (scrollTop > scrollNum && scrollTop < scrollNum + r) {
-                    index = i;
                     break;
                 }
+                i ++;
+                scrollNum = scrollNum + r;
             }
-            return index;
+            // for (let i = this.startIndex; i <= this.endIndex; i++) {
+            //     const r = this.itemMap.get(i);
+            //     const scrollNum = this.scrollMap.get(i) || this.getItemScrollNum(i);
+            //     if (typeof r === 'undefined' || typeof scrollNum === 'undefined') break;
+            //     if (scrollTop > scrollNum && scrollTop < scrollNum + r) {
+            //         index = i;
+            //         break;
+            //     }
+            // }
+            return i;
         },
     },
     beforeUnmount() {
+        window.cancelAnimationFrame(this.timerId);
         if (!this.$root || !this.reScrollKey) return;
         if (!this.$root.$virtualScroll) {
             this.$root.$virtualScroll = {} as any;

@@ -17,10 +17,13 @@
 				</ul>
 			</scroller>
 		</div> -->
-		<vueVirtualScroll :list="list" reScrollKey="blogHome">
+		<vueVirtualScroll :list="[...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,
+		...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,
+		...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,
+		...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list]" reScrollKey="blogHome">
 			<template v-slot:default="slotProps">
-				<!-- <BlogHomeList :item="slotProps.item" /> -->
-				<div @click="toDetail">{{ slotProps.item }}</div>
+				<BlogHomeList :item="slotProps.item" />
+				<!-- <div @click="toDetail">{{ slotProps.item }}</div> -->
 			</template>
 			<template v-slot:footer>
 				<SeeLoading
@@ -67,7 +70,7 @@ export default defineComponent({
 			return this.$store.blog.blogList.pullUpStatus;
 		},
 		list() {
-			return this.$store.blog.blogList.list1;
+			return this.$store.blog.blogList.list;
 		}
 	},
 	mounted() {
@@ -80,7 +83,7 @@ export default defineComponent({
 			// 	Array.from({ length: 10 }, (v, i) => i)
 			// );
 			// console.log(this.localList);
-			return this.blogList.pullUp1();
+			return this.blogList.pullUp();
 		},
 		toDetail() {
 			this.$router.push({ name: 'index' });

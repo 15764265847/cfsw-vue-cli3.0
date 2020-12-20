@@ -1,11 +1,11 @@
 <template>
     <li class="vue-virtual-list-item" :style="{ transform: `translateY(${scrollNum}px)` }">
-        <div :style="{ height: `${item.index * 5 + 100}px` }">{{ item.index }}</div>
+        <!-- <div >{{ item.index }}</div> -->
         <slot :item1="item.contain"></slot>
     </li>
 </template>
 <script lang="ts">
-import { defineComponent, h } from 'vue';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
     props: {
