@@ -1,6 +1,5 @@
 <template>
-    <li class="vue-virtual-list-item" :style="{ transform: `translateY(${scrollNum}px)` }">
-        <!-- <div >{{ item.index }}</div> -->
+    <li class="vue-virtual-list-item" :style="{ transform: `translate${direction === 'vertical' ? 'Y' : 'X'}(${scrollNum}px)` }">
         <slot :item1="item.contain"></slot>
     </li>
 </template>
@@ -16,12 +15,18 @@ export default defineComponent({
         scrollNum: {
             type: Number,
             default: 0
+        },
+        direction: {
+            type: String,
+            default: 'vertical'
         }
     },
     async mounted() {
         const { index, height } = this.item;
         await this.$nextTick();
-        this.$emit('updateHeight', this.$el.offsetHeight, index);
+        const { offsetHeight, offsetWidth } = this.$el;
+        const num = this.direction === 'vertical' ? offsetHeight : offsetWidth;
+        this.$emit('updateHeight', num, index);
     }
 });
 </script>

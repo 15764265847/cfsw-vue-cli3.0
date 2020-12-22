@@ -13,17 +13,27 @@
 						v-for="(item, key) in list"
 						:key="key"
 						:item="item"
+						:index="key"
 					/>
 				</ul>
 			</scroller>
 		</div> -->
-		<vueVirtualScroll :list="[...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,
-		...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,
-		...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,
-		...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list,...list]" reScrollKey="blogHome">
+		<vue-virtual-scroller
+			:list="[
+				...list,
+				...list,
+				...list,
+				...list,
+				...list,
+				...list,
+				...list,
+				...list,
+				...list
+			]"
+			reScrollKey="blogHome"
+		>
 			<template v-slot:default="slotProps">
 				<BlogHomeList :item="slotProps.item" />
-				<!-- <div @click="toDetail">{{ slotProps.item }}</div> -->
 			</template>
 			<template v-slot:footer>
 				<SeeLoading
@@ -32,7 +42,7 @@
 					:pullDownStatus="pullDownStatus"
 				/>
 			</template>
-		</vueVirtualScroll>
+		</vue-virtual-scroller>
 		<FooterContent />
 	</div>
 </template>
@@ -43,16 +53,17 @@ import SeeLoading from '@src/components/scroller/see-loading.vue';
 import BlogHomeList from '../components/blog-home-list.vue';
 import FooterContent from '@src/components/footer/footer.vue';
 import LogoHeader from '@src/components/header/logo-header.vue';
-import vueVirtualScroll from '@src/lib/vue-virtual-scroll/vue-virtual-scroll.vue';
+import { VueVirtualScroller } from '@wefly/vue-virtual-scroller';
+import '@wefly/vue-virtual-scroller/dist/vue-virtual-scroller.css';
 
 export default defineComponent({
 	components: {
 		LogoHeader,
-		// Scroller,
+		Scroller,
 		BlogHomeList,
 		FooterContent,
-		vueVirtualScroll,
-		SeeLoading
+		SeeLoading,
+		'vue-virtual-scroller': VueVirtualScroller
 	},
 	data() {
 		return {
@@ -83,7 +94,7 @@ export default defineComponent({
 			// 	Array.from({ length: 10 }, (v, i) => i)
 			// );
 			// console.log(this.localList);
-			return this.blogList.pullUp();
+			return (this as any).blogList.pullUp();
 		},
 		toDetail() {
 			this.$router.push({ name: 'index' });

@@ -22,7 +22,7 @@
 			</div>
 			<div class="artic-msg-content" v-html="articInfo"></div>
 			<div class="image-contain">
-                <img v-for="img in imgList" :key="img" :src="img" />
+				<img v-for="img in imgList" :key="img" :src="img" />
 			</div>
 			<div class="oparate-num">
 				<div>
@@ -68,7 +68,10 @@ export default defineComponent({
 		},
 		imgList(): string[] {
 			// return this.item.imgList.slice(0, 3);
-			return ['https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=4024133959,3421323374&fm=26&gp=0.jpg', 'https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2408640314,1202216066&fm=26&gp=0.jpg']
+			return [
+				'https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=4024133959,3421323374&fm=26&gp=0.jpg',
+				'https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2408640314,1202216066&fm=26&gp=0.jpg'
+			];
 		}
 	},
 	methods: {
@@ -175,7 +178,7 @@ export default defineComponent({
 .image-contain {
 	display: flex;
 
-	&>img {
+	& > img {
 		height: 80px;
 		flex: 1;
 	}

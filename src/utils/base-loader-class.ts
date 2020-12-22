@@ -100,7 +100,7 @@ export abstract class BaseLoaderList<
 	A
 > extends BaseLoaderClass<P, D, A> {
 	public params: P = {
-		limit: 20,
+		limit: 9,
 		page: 0
 	} as P;
 	public list: I[] = [] as I[];

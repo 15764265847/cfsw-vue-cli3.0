@@ -11,6 +11,7 @@
     "@wefly/vue-image-lazy-load": "^1.0.0",
     "@wefly/vue-rescroll": "^1.0.1",
     "@wefly/vue-store-next": "^1.0.0",
+    "@wefly/vue-virtual-scroller": "^1.0.0",
     "axios": "^0.21.0",
     "core-js": "^3.6.5",
     "i": "^0.3.6",
