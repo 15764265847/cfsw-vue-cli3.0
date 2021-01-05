@@ -19,6 +19,7 @@ module.exports = {
 		}
 	},
 	devServer: {
-		port: 8090
+		port: 8090,
+		disableHostCheck: true // 解决内网穿透
 	}
 };

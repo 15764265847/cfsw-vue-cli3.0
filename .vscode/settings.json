@@ -24,7 +24,7 @@
     ],
     // 使用项目配置规则
     "eslint.options": {
-      "configFile": "./eslintrc.js"
+      "configFile": "./.eslintrc.js"
     },
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": true,

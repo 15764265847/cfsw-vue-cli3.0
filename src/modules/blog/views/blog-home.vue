@@ -1,39 +1,9 @@
 <template>
 	<div class="chatroom">
 		<LogoHeader />
-		<!-- <div class="wrapper" ref="blogHome" v-if="blogList">
-			<scroller
-				@pullUp="pullUp"
-				:pullUpstatus="pullUpStatus"
-				:pullDownStatus="pullDownStatus"
-				v-rescroll="{ name: 'chatroom' }"
-			>
-				<ul>
-					<BlogHomeList
-						v-for="(item, key) in list"
-						:key="key"
-						:item="item"
-						:index="key"
-					/>
-				</ul>
-			</scroller>
-		</div> -->
-		<vue-virtual-scroller
-			:list="[
-				...list,
-				...list,
-				...list,
-				...list,
-				...list,
-				...list,
-				...list,
-				...list,
-				...list
-			]"
-			reScrollKey="blogHome"
-		>
+		<vue-virtual-scroller :list="list" reScrollKey="blogHome">
 			<template v-slot:default="slotProps">
-				<BlogHomeList :item="slotProps.item" />
+				<BlogHomeListItem :item="slotProps.item" />
 			</template>
 			<template v-slot:footer>
 				<SeeLoading
@@ -48,53 +18,44 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Scroller from '@src/components/scroller/scroller.vue';
 import SeeLoading from '@src/components/scroller/see-loading.vue';
-import BlogHomeList from '../components/blog-home-list.vue';
+import BlogHomeListItem from '../components/blog-home-list-item.vue';
 import FooterContent from '@src/components/footer/footer.vue';
 import LogoHeader from '@src/components/header/logo-header.vue';
 import { VueVirtualScroller } from '@wefly/vue-virtual-scroller';
 import '@wefly/vue-virtual-scroller/dist/vue-virtual-scroller.css';
 
+import { BlogList } from '@src/modules/blog/store';
+
 export default defineComponent({
 	components: {
 		LogoHeader,
-		Scroller,
-		BlogHomeList,
+		BlogHomeListItem,
 		FooterContent,
 		SeeLoading,
 		'vue-virtual-scroller': VueVirtualScroller
 	},
-	data() {
-		return {
-			localList: []
-		};
-	},
 	computed: {
-		blogList(): any {
+		blogList(): BlogList {
 			return this.$store.blog.blogList;
 		},
-		pullDownStatus() {
+		pullDownStatus(): BlogList['pullDownStatus'] {
 			return this.$store.blog.blogList.pullDownStatus;
 		},
-		pullUpStatus() {
+		pullUpStatus(): BlogList['pullUpStatus'] {
 			return this.$store.blog.blogList.pullUpStatus;
 		},
-		list() {
+		list(): BlogList['list'] {
 			return this.$store.blog.blogList.list;
 		}
 	},
 	mounted() {
-		// if (this.list.length) return;
-		// this.pullUp();
+		if (this.list.length) return;
+		this.pullUp();
 	},
 	methods: {
 		async pullUp() {
-			// (this as any).localList = (this as any).localList.concat(
-			// 	Array.from({ length: 10 }, (v, i) => i)
-			// );
-			// console.log(this.localList);
-			return (this as any).blogList.pullUp();
+			return this.blogList.pullUp();
 		},
 		toDetail() {
 			this.$router.push({ name: 'index' });

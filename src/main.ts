@@ -11,9 +11,10 @@ import VueImageLazyLoad from '@wefly/vue-image-lazy-load';
 // 	console.log(op);
 // });
 
-createApp(App)
+const app = createApp(App)
 	.use(router)
 	.use(store)
 	.use(VueRescroll)
 	.use(VueImageLazyLoad)
 	.mount('#app');
+console.log(app, 'ttttttttttttttttttt');

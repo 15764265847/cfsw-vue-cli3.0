@@ -22,7 +22,7 @@
 			</div>
 			<div class="artic-msg-content" v-html="articInfo"></div>
 			<div class="image-contain">
-				<img v-for="img in imgList" :key="img" :src="img" />
+				<ImageList :list="imgList" />
 			</div>
 			<div class="oparate-num">
 				<div>
@@ -44,13 +44,17 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { timeFormat } from '@src/utils/filter';
+import ImageList from '@src/components/image-content/image-list.vue';
 
 export default defineComponent({
+	components: {
+		ImageList
+	},
 	props: {
 		item: {
-			type: Object as any,
+			type: Object as PropType<Loader.ListItem>,
 			default: () => {
-				return;
+				return {};
 			}
 		}
 	},
@@ -67,11 +71,36 @@ export default defineComponent({
 			return msg.slice(0, 80);
 		},
 		imgList(): string[] {
-			// return this.item.imgList.slice(0, 3);
-			return [
+			const pool: string[] = [
 				'https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=4024133959,3421323374&fm=26&gp=0.jpg',
-				'https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2408640314,1202216066&fm=26&gp=0.jpg'
+				'https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2408640314,1202216066&fm=26&gp=0.jpg',
+				'https://dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3128439526,1544234138&fm=26&gp=0.jpg',
+				'https://dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3534110117,2193560125&fm=26&gp=0.jpg',
+				'https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=224676309,2137626052&fm=26&gp=0.jpg',
+				'https://dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2227141452,3914538426&fm=26&gp=0.jpg',
+				'https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3527878628,2215288807&fm=26&gp=0.jpg',
+				'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=984172228,2724665722&fm=26&gp=0.jpg',
+				'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=726671648,2385216845&fm=26&gp=0.jpg',
+				'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=766611624,2535133080&fm=26&gp=0.jpg',
+				'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1688000231,463336738&fm=26&gp=0.jpg',
+				'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=4024412743,1615646202&fm=26&gp=0.jpg',
+				'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3743140528,4019662611&fm=26&gp=0.jpg',
+				'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1507375745,3678937279&fm=26&gp=0.jpg',
+				'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=762538272,2713503463&fm=26&gp=0.jpg',
+				'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3097912305,1217293897&fm=26&gp=0.jpg'
 			];
+			// 随机总数
+			const rang: number = Math.floor(Math.random() * 9);
+			const indexs: number[] = [];
+			// 随机序号
+			for (let i = 0; i < rang; ) {
+				const index = Math.floor(Math.random() * 16);
+				if (!indexs.includes(index)) {
+					indexs.push(index);
+					i++;
+				}
+			}
+			return indexs.map((i) => pool[i]);
 		}
 	},
 	methods: {
@@ -176,11 +205,6 @@ export default defineComponent({
 	}
 }
 .image-contain {
-	display: flex;
-
-	& > img {
-		height: 80px;
-		flex: 1;
-	}
+	margin: 0 15px;
 }
 </style>

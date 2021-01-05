@@ -18,6 +18,7 @@ module.exports = {
 		'prefer-spread': 0
 	},
 	parserOptions: {
-		ecmaVersion: 2020
+		ecmaVersion: 6,
+		sourceType: 'module'
 	}
 };
