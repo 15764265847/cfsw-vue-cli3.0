@@ -15,7 +15,7 @@ export default defineComponent({
 		},
 		src: {
 			type: String,
-			require: true
+			required: true
 		}
 	},
 	computed: {
@@ -26,7 +26,7 @@ export default defineComponent({
 	methods: {
 		preview(e: any) {
 			console.log('预览', e, e.target.offsetWidth);
-			imagePreview();
+			imagePreview(this.src);
 		}
 	}
 });
