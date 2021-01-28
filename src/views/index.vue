@@ -12,7 +12,11 @@
 					{{ item }}
 				</div> -->
 				<div v-if="currentIndex === 0">
-					<div v-for="(item, index) in list0" :key="index">
+					<div
+						v-for="(item, index) in list0"
+						:key="index"
+						@click="to"
+					>
 						{{ item }}
 					</div>
 				</div>
