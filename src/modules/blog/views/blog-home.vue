@@ -20,7 +20,7 @@
 import { defineComponent } from 'vue';
 import SeeLoading from '@src/components/scroller/see-loading.vue';
 import BlogHomeListItem from '../components/blog-home-list-item.vue';
-import FooterContent from '@src/components/footer/footer.vue';
+import FooterContent from '@src/components/footer/footer';
 import LogoHeader from '@src/components/header/logo-header.vue';
 import { VueVirtualScroller } from '@wefly/vue-virtual-scroller';
 import '@wefly/vue-virtual-scroller/dist/vue-virtual-scroller.css';

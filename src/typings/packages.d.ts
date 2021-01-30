@@ -5,5 +5,6 @@ declare module 'vue-lazy-store';
 declare module 'vue-rescroll';
 declare module 'js-cookie';
 declare module '*.js';
+declare module '*.less';
 declare module 'vue-audios';
 declare module 'vue-virtual-scroll-list';

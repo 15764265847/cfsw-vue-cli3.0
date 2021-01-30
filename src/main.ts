@@ -18,3 +18,9 @@ const app = createApp(App)
 	.use(VueImageLazyLoad)
 	.mount('#app');
 console.log(app, 'ttttttttttttttttttt');
+
+// ./App.vue
+export default ({ __scopeId }: any) => {
+	// 这里可以取到 __scopeId
+	console.log(__scopeId, 'ccccccccccccccccc');
+};
