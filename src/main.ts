@@ -1,6 +1,6 @@
-import { createApp } from 'vue';
+import { createSSRApp } from 'vue';
 import App from './App.vue';
-import './registerServiceWorker';
+// import './registerServiceWorker';
 import router from './router';
 import store from './store';
 import VueRescroll from '@wefly/vue-rescroll';
@@ -11,7 +11,7 @@ import VueImageLazyLoad from '@wefly/vue-image-lazy-load';
 // 	console.log(op);
 // });
 
-const app = createApp(App)
+const app = createSSRApp(App)
 	.use(router)
 	.use(store)
 	.use(VueRescroll)
