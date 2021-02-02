@@ -1,23 +1,27 @@
 const { VueLoaderPlugin } = require('vue-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
-const templatePath = path.resolve(__dirname, './public/index.html');
+// const path = require('path');
 
 module.exports = {
-
     target: 'node',
+
     mode: 'production',
 
     entry: './src/server-main.js',
 
     module: {
         rules: [
-            { test: /\.vue$/, loader: 'vue-loader' }
+            { test: /\.vue$/, loader: 'vue-loader' },
+            {
+                test: /\.css$/,
+                use: ["style-loader", "css-loader"],
+            }
         ]
     },
 
     plugins: [
         new VueLoaderPlugin(),
+        // 模板文件
         new HtmlWebpackPlugin({
             template: 'public/index.html'
         })
@@ -28,9 +32,8 @@ module.exports = {
     },
 
     output: {
-        // library: 'app',
-        libraryTarget: "commonjs",
-        // libraryExport: 'default'
+        filename: '[name].[contenthash].js',
+        libraryTarget: "commonjs"
     }
 
 };
