@@ -26,7 +26,7 @@ export class BlogList extends BaseLoaderList<
 /**
  * 获取文章详情
  */
-class BlogDetail extends BaseLoaderData<
+export class BlogDetail extends BaseLoaderData<
 	Detail.ArticDetail.RequestParams,
 	Detail.ArticDetail.Data,
 	BlogApi

@@ -15,7 +15,8 @@ module.exports = {
 		'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 		'@typescript-eslint/no-var-requires': 0,
 		'@typescript-eslint/no-explicit-any': 0,
-		'prefer-spread': 0
+		'prefer-spread': 0,
+		'@typescript-eslint/camelcase': 0
 	},
 	parserOptions: {
 		ecmaVersion: 6,

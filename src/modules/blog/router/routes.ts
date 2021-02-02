@@ -3,8 +3,8 @@ const RouteView = () =>
 	import(/* webpackChunkName: "blog" */ '../store').then(baseRouteView);
 const BlogHome = () =>
 	import(/* webpackChunkName: "blog" */ '../views/blog-home.vue');
-// const BlogDetail = () =>
-// 	import(/* webpackChunkName: "blog" */ '../views/blog-detail.vue');
+const BlogDetail = () =>
+	import(/* webpackChunkName: "blog" */ '../views/blog-detail');
 // const BlogComment = () =>
 // 	import(/* webpackChunkName: "blog" */ '../views/blog-comment.vue');
 
@@ -29,16 +29,16 @@ const routes: Array<RouteRecordRaw> = [
 				path: 'home',
 				name: 'blog-home',
 				component: BlogHome
+			},
+			/**
+			 * 微博详情
+			 * path: /blog/detail
+			 */
+			{
+				path: 'detail',
+				name: 'blog-detail',
+				component: BlogDetail
 			}
-			// /**
-			//  * 微博详情
-			//  * path: /blog/detail
-			//  */
-			// {
-			// 	path: 'detail',
-			// 	name: 'blog-detail',
-			// 	component: BlogDetail
-			// },
 			// /**
 			//  * 微博评论
 			//  * path: /blog/comment

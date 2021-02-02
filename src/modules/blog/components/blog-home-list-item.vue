@@ -59,9 +59,6 @@ export default defineComponent({
 		}
 	},
 	computed: {
-		baseApi() {
-			return '';
-		},
 		headImgUrl(): string {
 			return `${this.item.headimg}`;
 		},
@@ -108,7 +105,10 @@ export default defineComponent({
 			return timeFormat(Number(creatAt));
 		},
 		toDetail() {
-			this.$router.push({ name: 'index' });
+			this.$router.push({
+				name: 'blog-detail',
+				query: { id: this.item.articId }
+			});
 		}
 	}
 });
