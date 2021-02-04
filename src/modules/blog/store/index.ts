@@ -55,7 +55,7 @@ export class BlogDetail extends BaseLoaderData<
 /**
  * 获取文章评论
  */
-class GetUserComment extends BaseLoaderList<
+export class GetUserComment extends BaseLoaderList<
 	any,
 	Loader.Data,
 	Loader.ListItem,

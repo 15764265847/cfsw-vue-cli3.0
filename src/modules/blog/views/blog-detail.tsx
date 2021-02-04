@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue';
-// import GeneralHeader from '@src/components/header/general-header.vue';
-// import BlogDetailComment from '../components/blog-detail-comment.vue';
-// import BlogDetailFooter from '../components/blog-detail-footer.vue';
+import HeaderGeneral from '@src/components/header/header-general';
+import BlogCommentList from '../components/blog-comment-list';
+import BlogDetailFooter from '../components/blog-detail-footer';
 
 import { getQueryParams } from '@src/utils/publics';
 import { config } from '@src/utils/config';
@@ -15,8 +15,6 @@ import {
 import { BlogDetail } from '../store/index';
 
 import style from './blog-detail.module.less';
-
-console.log(style, 'xxxxxxxxxxxxxxxxxxxxxxx');
 
 const {
 	blogLoading,
@@ -40,9 +38,9 @@ const {
 export default defineComponent({
 	name: 'blog-detail',
 	components: {
-		// GeneralHeader,
-		// BlogDetailComment,
-		// BlogDetailFooter
+		HeaderGeneral,
+		BlogCommentList,
+		BlogDetailFooter
 	},
 	computed: {
 		id(): number {
@@ -110,17 +108,17 @@ export default defineComponent({
 							onClick={this.onOperate}
 						></div>
 					</div>
-					{/* <BlogDetailComment />
-					<BlogDetailFooter /> */}
+					<BlogCommentList />
+					<BlogDetailFooter />
 				</div>
 			);
 		}
 		return (
 			<div class={style.detail} v-rescroll={{ name: `detail${id}` }}>
-				{/* <GeneralHeader
-					header-title="微博正文"
-					back-path-name="blog-home"
-				/> */}
+				<HeaderGeneral
+					headerTitle="微博正文"
+					backPathName="blog-home"
+				/>
 				<div class={ detailContain }>{content}</div>
 			</div>
 		);

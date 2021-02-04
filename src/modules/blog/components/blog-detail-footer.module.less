@@ -1,0 +1,59 @@
+.footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	height: 50px;
+	line-height: 50px;
+	// prettier-ignore
+	border-top: solid #adadad 1PX;
+	background-color: #fff;
+	width: 100%;
+	text-align: left;
+	overflow: hidden;
+
+	.operate {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		.inputContain {
+			width: 100%;
+			margin-left: 20px;
+			height: 34px;
+			font-size: 18px;
+			padding-left: 20px;
+			border-radius: 50px;
+			border: 1px solid #edeff2;
+			line-height: 34px;
+        }
+        
+		.operateArtic {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-right: 20px;
+
+			&.oprateClick {
+				margin-left: 20px;
+			}
+
+			.oprated {
+				fill: #00dcff;
+			}
+
+			.agreeauNum {
+				margin-left: 4px;
+				font-size: 12px;
+				color: #adadad;
+			}
+		}
+
+		.operateComment {
+			margin-right: 20px;
+			height: 20px;
+			width: 20px;
+		}
+	}
+}
