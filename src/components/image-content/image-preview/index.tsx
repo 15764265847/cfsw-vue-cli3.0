@@ -16,13 +16,9 @@ const ImagePreview = defineComponent({
 			</div>
 		)
 	},
-	mounted() {
-		console.log(this.src);
-	},
 	methods: {
 		close() {
 			this.$emit('close');
-			// document.body.removeChild(this.$el);
 		}
 	}
 })

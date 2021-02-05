@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue';
 import SeeLoading from './see-loading';
 
-import style from './scroller.module.less';
+import { my_scroll } from './scroller.module.less';
 
 export default defineComponent({
 	name: 'scroller',
@@ -29,23 +29,19 @@ export default defineComponent({
 		}
 	},
 	render() {
+		const slots = {
+			empty: <slot name="empty"></slot>
+		};
 		return (
-			<div class={ style.my_scroll }>
+			<div class={ my_scroll }>
 				<slot></slot>
 				<see-loading
 					pullUp={this.pullUp}
 					pullUpstatus={this.pullUpstatus}
 				>
-					<div v-slot="empty">
-						<slot name="empty"></slot>
-					</div>
+					<div v-slots={ slots }></div>
 				</see-loading>
 			</div>
 		);
-	},
-	methods: {
-		pullUp(): void {
-			this.pullUp();
-		}
 	}
 });
