@@ -2,7 +2,7 @@ import { baseRouteView } from '@src/router/base-route-view';
 const RouteView = () =>
 	import(/* webpackChunkName: "blog" */ '../store').then(baseRouteView);
 const BlogHome = () =>
-	import(/* webpackChunkName: "blog" */ '../views/blog-home.vue');
+	import(/* webpackChunkName: "blog" */ '../views/blog-home');
 const BlogDetail = () =>
 	import(/* webpackChunkName: "blog" */ '../views/blog-detail');
 // const BlogComment = () =>

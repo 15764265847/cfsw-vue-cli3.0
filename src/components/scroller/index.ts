@@ -1,2 +1,2 @@
-import MyScroll from './scroller.vue';
+import MyScroll from './scroller';
 export default MyScroll;

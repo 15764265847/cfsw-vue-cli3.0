@@ -1,39 +1,24 @@
-<template>
-	<div class="chatroom">
-		<LogoHeader />
-		<vue-virtual-scroller :list="list" reScrollKey="blogHome">
-			<template v-slot:default="slotProps">
-				<BlogHomeListItem :item="slotProps.item" />
-			</template>
-			<template v-slot:footer>
-				<SeeLoading
-					@pullUp="pullUp"
-					:pullUpstatus="pullUpStatus"
-					:pullDownStatus="pullDownStatus"
-				/>
-			</template>
-		</vue-virtual-scroller>
-		<FooterContent />
-	</div>
-</template>
-<script lang="ts">
 import { defineComponent } from 'vue';
-import SeeLoading from '@src/components/scroller/see-loading.vue';
+import SeeLoading from '@src/components/scroller/see-loading';
 import BlogHomeListItem from '../components/blog-home-list-item.vue';
 import FooterContent from '@src/components/footer/footer';
 import LogoHeader from '@src/components/header/logo-header.vue';
 import { VueVirtualScroller } from '@wefly/vue-virtual-scroller';
 import '@wefly/vue-virtual-scroller/dist/vue-virtual-scroller.css';
+import style from './blog-home.module.less';
 
 import { BlogList } from '@src/modules/blog/store';
 
+const { chatroom } = style;
+
 export default defineComponent({
+	name: 'blog-home',
 	components: {
 		LogoHeader,
 		BlogHomeListItem,
 		FooterContent,
 		SeeLoading,
-		'vue-virtual-scroller': VueVirtualScroller
+		VueVirtualScroller
 	},
 	computed: {
 		blogList(): BlogList {
@@ -49,6 +34,30 @@ export default defineComponent({
 			return this.$store.blog.blogList.list;
 		}
 	},
+	render() {
+		const slots = {
+			default: (slotProps: { item: Loader.ListItem }) => (
+				<BlogHomeListItem item={slotProps.item} />
+			),
+			footer: () => (
+				<SeeLoading
+					pullUp={this.pullUp}
+					pullUpstatus={this.pullUpStatus}
+				/>
+			)
+		};
+		return (
+			<div class={chatroom}>
+				<LogoHeader />
+				<vue-virtual-scroller
+					list={this.list}
+					reScrollKey="blogHome"
+					v-slots={slots}
+				/>
+				<FooterContent />
+			</div>
+		);
+	},
 	mounted() {
 		if (this.list.length) return;
 		this.pullUp();
@@ -62,18 +71,3 @@ export default defineComponent({
 		}
 	}
 });
-</script>
-
-<style lang="less" scoped>
-.chatroom {
-	height: 100%;
-
-	.wrapper {
-		position: relative;
-		min-width: 60%;
-		height: 86%;
-		overflow-y: hidden;
-		background-color: #f7f7f7;
-	}
-}
-</style>

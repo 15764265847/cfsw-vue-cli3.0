@@ -1,12 +1,11 @@
-<template>
-	<div class="image-contain" :style="realStyle" @click.stop="preview"></div>
-</template>
-<script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import imagePreview from './image-preview';
 
+import { image_contain } from './image-contain.module.less';
+
 export default defineComponent({
-	props: {
+    name: 'image-contain',
+    props: {
 		style: {
 			type: Object as PropType<CSSRule>,
 			default: () => {
@@ -23,30 +22,14 @@ export default defineComponent({
 			return { ...this.style, backgroundImage: `url(${this.src})` };
 		}
 	},
+    render() {
+        return <div class={ image_contain } style={ this.realStyle } onClick={ this.preview }></div>
+    },
 	methods: {
 		preview(e: any) {
+            e.stopPropagation();
 			console.log('预览', e, e.target.offsetWidth);
 			imagePreview(this.src);
 		}
 	}
-});
-</script>
-<style lang="less" scoped>
-.image-contain {
-	// height: 100%;
-	// width: 100%;
-	border-radius: 4px;
-	height: 106px;
-	width: 31%;
-	overflow: hidden;
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-position: 50% 50%;
-	margin-right: 2%;
-	margin-top: 8px;
-
-	&:nth-child(3n) {
-		margin-right: 0;
-	}
-}
-</style>
+})

@@ -44,7 +44,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { timeFormat } from '@src/utils/filter';
-import ImageList from '@src/components/image-content/image-list.vue';
+import ImageList from '@src/components/image-content/image-list';
 
 export default defineComponent({
 	components: {

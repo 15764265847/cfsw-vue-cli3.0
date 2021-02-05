@@ -1,4 +1,4 @@
-import { createApp } from 'vue';
+import { createApp, ComponentPublicInstance } from 'vue';
 import App from './App.vue';
 import './registerServiceWorker';
 import router from './router';
@@ -17,4 +17,11 @@ const app = createApp(App)
 	.use(VueRescroll)
 	.use(VueImageLazyLoad)
 	.mount('#app');
-console.log(app, 'ttttttttttttttttttt');
+
+window.app = app;
+
+declare global {
+	interface Window {
+		app: ComponentPublicInstance;
+	}
+}
