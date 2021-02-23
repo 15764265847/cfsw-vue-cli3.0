@@ -26,21 +26,28 @@ export default defineComponent({
 			default: () => {
 				return;
 			}
+		},
+		slots: {
+			type: Object,
+			default: () => {
+				return {};
+			}
 		}
 	},
 	render() {
-		const slots = {
-			empty: <slot name="empty"></slot>
-		};
+		// const slots = {
+		// 	empty: <slot name="empty"></slot>
+		// };
 		return (
 			<div class={ my_scroll }>
-				<slot></slot>
+				{ this.slots.default() }
 				<see-loading
 					pullUp={this.pullUp}
 					pullUpstatus={this.pullUpstatus}
 				>
-					<div v-slots={ slots }></div>
+					{/* <div v-slots={ slots }></div> */}
 				</see-loading>
+				<slot name="footer" />
 			</div>
 		);
 	}
