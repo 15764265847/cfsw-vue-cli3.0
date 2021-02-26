@@ -4,9 +4,29 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import path from 'path';
 import postcssPx2rem from 'postcss-px2rem';
 
-// https://vitejs.dev/config/
+const ssrTransformCustomDir = () => {
+  return {
+    props: [],
+    needRuntime: true
+  }
+}
+
 export default defineConfig({
-  plugins: [vue(),vueJsx()],
+  plugins: [vueJsx(), vue(
+    {
+      template: {
+        ssr: true,
+        compilerOptions: {
+          directiveTransforms: {
+            'img-lazy-load': ssrTransformCustomDir,
+            rescroll: ssrTransformCustomDir,
+            // slots: ssrTransformCustomDir
+          }
+        }
+      },
+      ssr: true
+    }
+  )],
   resolve: {
     alias: {
       '@src': path.resolve(__dirname, './src')

@@ -6,7 +6,8 @@ interface RouterList {
 	toPathName: string;
 }
 
-export default defineComponent({
+const footerContent = defineComponent({
+	name: 'footer-content',
 	setup() {
 		const list: Array<RouterList> = [
 			{
@@ -53,3 +54,5 @@ export default defineComponent({
 		);
 	}
 });
+
+export default footerContent;

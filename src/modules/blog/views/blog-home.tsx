@@ -2,20 +2,23 @@ import { defineComponent } from 'vue';
 import BlogHomeListItem from '../components/blog-home-list-item.vue';
 import FooterContent from '@src/components/footer/footer';
 import LogoHeader from '@src/components/header/logo-header.vue';
-import Scroller from '@src/components/scroller/scroller';
+import SeeLoading from '@src/components/scroller/see-loading';
 import style from './blog-home.module.css';
+import { VueVirtualScroller } from '@wefly/vue-virtual-scroller';
+import '@wefly/vue-virtual-scroller/dist/style.css';
 
 import { BlogList } from '../store';
 
 const { chatroom } = style;
 
-export default defineComponent({
+const blogHome = defineComponent({
 	name: 'blog-home',
 	components: {
 		LogoHeader,
 		BlogHomeListItem,
 		FooterContent,
-		Scroller
+		VueVirtualScroller,
+		SeeLoading
 	},
 	computed: {
 		blogList(): BlogList {
@@ -33,14 +36,24 @@ export default defineComponent({
 	},
 	render() {
 		const slots = {
-			list: () => {
-				return this.list.map(item => <BlogHomeListItem item={ item } />)
-			}
+			default: (slotProps: { item: Loader.ListItem }) => (
+				<BlogHomeListItem item={slotProps.item} />
+			),
+			footer: () => (
+				<SeeLoading
+					pullUp={this.pullUp}
+					pullUpstatus={this.pullUpStatus}
+				/>
+			)
 		};
 		return (
 			<div class={chatroom}>
 				<LogoHeader />
-				<Scroller pullUpstatus={ this.pullUpStatus } pullUp={ this.pullUp } slots={ slots } />
+				<vue-virtual-scroller
+					list={this.list}
+					reScrollKey="blogHome"
+					v-slots={slots}
+				/>
 				<FooterContent />
 			</div>
 		);
@@ -54,3 +67,5 @@ export default defineComponent({
 		}
 	}
 });
+
+export default blogHome;

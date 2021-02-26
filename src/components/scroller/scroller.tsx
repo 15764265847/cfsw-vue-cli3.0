@@ -1,15 +1,15 @@
 import { defineComponent } from 'vue';
-// import SeeLoading from './see-loading';
+import SeeLoading from './see-loading';
 
 import style from './scroller.module.less';
 
 const { my_scroll } = style;
 
-export default defineComponent({
+const scroller = defineComponent({
 	name: 'scroller',
-	// components: {
-	// 	SeeLoading
-	// },
+	components: {
+		SeeLoading
+	},
 	props: {
 		pullUpstatus: {
 			type: String,
@@ -28,28 +28,23 @@ export default defineComponent({
 			default: () => {
 				return;
 			}
-		},
-		slots: {
-			type: Object,
-			default: () => {
-				return {}
-			}
 		}
 	},
 	render() {
 		const slots = {
-			empty: <slot name="empty"></slot>
+			empty: () => <slot name="empty"></slot>
 		};
 		return (
 			<div class={ my_scroll }>
-				{ this.slots.list() }
-				{/* <see-loading
+				<slot />
+				<see-loading
 					pullUp={this.pullUp}
 					pullUpstatus={this.pullUpstatus}
-				>
-					<div v-slots={ slots }></div>
-				</see-loading> */}
+					v-slots={ slots }
+				/>
 			</div>
 		);
 	}
 });
+
+export default scroller;

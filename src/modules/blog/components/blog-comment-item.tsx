@@ -4,8 +4,8 @@ import { timeFormat } from '@src/utils/filter';
 
 import style from './blog-comment-item.modules.less';
 
-export default defineComponent({
-	name: 'blog-detail-comment-item',
+const blogCommentList = defineComponent({
+	name: 'blog-comment-item',
 	props: {
 		index: {
 			type: Number,
@@ -63,3 +63,5 @@ export default defineComponent({
 		}
 	}
 });
+
+export default blogCommentList;

@@ -35,7 +35,7 @@ const {
     blogTitle
 } = style;
 
-export default defineComponent({
+const blogDetail = defineComponent({
 	name: 'blog-detail',
 	components: {
 		HeaderGeneral,
@@ -92,7 +92,7 @@ export default defineComponent({
 						<h1 class={ blogTitle }>{title}</h1>
 						<div class={ author }>
 							<div class={ authorHeadimg }>
-								<img src={headImgUrl} />
+								<img v-img-lazy-load src={headImgUrl} />
 							</div>
 							<div class={ name }>{nickname}</div>
 							<div class={ time }>
@@ -124,3 +124,7 @@ export default defineComponent({
 		);
 	}
 });
+
+// v-rescroll={{ name: `detail${id}` }}
+
+export default blogDetail;

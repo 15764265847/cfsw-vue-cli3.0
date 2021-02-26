@@ -4,9 +4,9 @@ import loadingIcon from './loading.gif';
 
 import style from './see-loading.module.less';
 
-const { seeLoading, done, error, loading, empty, loadImg } = style;
+const { seeLoadingContain, done, error, loading, empty, loadImg } = style;
 
-export default defineComponent({
+const seeLoading =  defineComponent({
 	name: 'see-loading',
 	props: {
 		pullUpstatus: {
@@ -55,7 +55,7 @@ export default defineComponent({
 				</div>
 			)
 		};
-		return <div class={seeLoading}>{content[status]}</div>;
+		return <div class={seeLoadingContain}>{content[status]}</div>;
 	},
 	async mounted() {
 		await this.onSee();
@@ -86,3 +86,5 @@ export default defineComponent({
 		clearInterval(this.timer);
 	}
 });
+
+export default seeLoading;

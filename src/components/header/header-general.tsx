@@ -5,7 +5,7 @@ import style from './header-general.module.less';
 
 const { empty, header, right } = style;
 
-export default defineComponent({
+const headerGeneral = defineComponent({
 	name: 'header-general',
 	props: {
 		headerTitle: {
@@ -46,3 +46,5 @@ export default defineComponent({
 		}
 	}
 });
+
+export default headerGeneral;

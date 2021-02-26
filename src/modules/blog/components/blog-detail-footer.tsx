@@ -12,7 +12,7 @@ import style from './blog-detail-footer.module.less';
 
 const { footer, operate, inputContain, operateArtic, oprateClick, oprated, agreeauNum, operateComment } = style;
 
-export default defineComponent({
+const blogDetailFooter = defineComponent({
 	name: 'blog-detail-footer',
 	props: {
 		hidshow: {
@@ -56,11 +56,11 @@ export default defineComponent({
 					<div class={ operateArtic } onClick={this.toButtom}>
 						<span class={ agreeauNum }>{detailData.commentnum}</span>
 					</div>
-					<img
+					{/* <img
 						class={ operateComment }
 						src="../images/share.svg"
 						onClick={this.toShare}
-					/>
+					/> */}
 				</div>
 			</div>
 		);
@@ -109,3 +109,5 @@ export default defineComponent({
 		}
 	}
 });
+
+export default blogDetailFooter;

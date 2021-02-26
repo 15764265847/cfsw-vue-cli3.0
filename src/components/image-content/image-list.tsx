@@ -3,7 +3,7 @@ import ImageContain from './image-contain';
 
 import { image_list } from './image-list.module.less';
 
-export default defineComponent({
+const imageList = defineComponent({
 	name: 'image-list',
 	components: {
 		ImageContain
@@ -37,3 +37,5 @@ export default defineComponent({
 		);
 	}
 });
+
+export default imageList;

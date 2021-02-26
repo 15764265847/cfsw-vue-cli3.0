@@ -1,6 +1,6 @@
 import { baseRouteView } from "@src/router/base-route-view";
-import Store from '../store';
-const RouteView = baseRouteView(Store);
+const RouteView = () =>
+	import('../store').then(baseRouteView);
 
 const BlogHome = () => import("../views/blog-home");
 const BlogDetail = () => import("../views/blog-detail");
@@ -15,7 +15,7 @@ const routes: RouteRecordRaw[] = [
    */
   {
     path: "/blog",
-    component: RouterView,
+    component: RouteView,
     children: [
       /**
        * 微博feed流

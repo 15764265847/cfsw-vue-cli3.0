@@ -3,7 +3,7 @@ import imagePreview from './image-preview';
 
 import { image_contain } from './image-contain.module.less';
 
-export default defineComponent({
+const imageContain = defineComponent({
     name: 'image-contain',
     props: {
 		style: {
@@ -33,3 +33,5 @@ export default defineComponent({
 		}
 	}
 })
+
+export default imageContain;

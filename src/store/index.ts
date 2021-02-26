@@ -3,7 +3,6 @@ import Store from '@wefly/vue-store-next';
 export class BaseStore extends Store {
 	public constructor() {
 		super();
-		console.log(this);
 		return this.init();
 	}
 }
