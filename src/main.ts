@@ -15,5 +15,5 @@ export function createApp() {
      .use(store)
      .use(VueRescroll)
      .use(VueImageLazyLoad);
-  return { app, router };
+  return { app, router, store };
 }

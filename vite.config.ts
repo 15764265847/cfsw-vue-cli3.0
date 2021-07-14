@@ -15,21 +15,18 @@ export default defineConfig({
   plugins: [vueJsx(), vue(
     {
       template: {
-        ssr: true,
         compilerOptions: {
           directiveTransforms: {
             'img-lazy-load': ssrTransformCustomDir,
-            rescroll: ssrTransformCustomDir,
-            // slots: ssrTransformCustomDir
+            rescroll: ssrTransformCustomDir
           }
         }
-      },
-      ssr: true
+      }
     }
   )],
   resolve: {
     alias: {
-      '@src': path.resolve(__dirname, './src')
+      '@src': path.resolve(__dirname, './src'),
     }
   },
   // css: {
